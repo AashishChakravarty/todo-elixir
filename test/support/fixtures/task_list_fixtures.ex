@@ -17,7 +17,6 @@ defmodule Todo.TaskListFixtures do
       })
       |> Todo.TaskList.create_group()
 
-    IO.inspect(group)
     group
   end
 

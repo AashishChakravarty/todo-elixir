@@ -1,4 +1,7 @@
 defmodule Todo.TaskList.Group do
+  @moduledoc """
+  Group Schema
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

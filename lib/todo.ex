@@ -1,4 +1,5 @@
 defmodule Todo do
+  # credo:disable-for-next-line
   @moduledoc """
   Todo keeps the contexts that define your domain
   and business logic.

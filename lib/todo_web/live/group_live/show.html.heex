@@ -1,0 +1,30 @@
+<.header>
+  <div class="text-2xl font-bold mb-2"><%= @group.name %></div>
+   <:actions>
+    <.link navigate={~p"/"}>
+      <div class="font-medium text-blue-600 dark:text-blue-500 hover:underline">ALL GROUPS</div>
+    </.link>
+  </:actions>
+</.header>
+
+<ul role="list" class="divide-y divide-slate-200">
+  <li class="flex items-center p-4" :for={{group_task, i} <- get_group_tasks(@group)}>
+    <div :if={!group_task.dependent_group_task || (group_task.dependent_group_task && group_task.dependent_group_task.is_completed)}>
+      <input 
+        id={"#{i}-checkbox"}
+        phx-click="toggle_task_completed"
+        type="checkbox"
+        checked={group_task.is_completed} value={group_task.is_completed} 
+        phx-value-id={group_task.id}
+        name="checkbox"
+        class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 dark:focus:ring-green-600 dark:ring-offset-gray-800 focus:ring-2 dark:border-gray-600"
+      >
+    </div>
+    <div :if={group_task.dependent_group_task && !group_task.dependent_group_task.is_completed}>
+      <span aria-hidden="true">&#x1F512;</span>
+    </div>
+    <div class="ml-3 overflow-hidden">
+      <p class={["text-sm font-medium text-slate-900", group_task.is_completed && "line-through"]}><%= group_task.name %></p>
+    </div>
+  </li>
+</ul>

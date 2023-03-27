@@ -1,0 +1,13 @@
+<.header>
+  <div class="text-2xl font-bold mb-2">Things To Do</div>
+</.header>
+
+<ul role="list" class="divide-y divide-slate-200">
+  <li class="flex items-center p-4 cursor-pointer hover:bg-slate-100" :for={{id, group} <- @streams.groups} phx-click={JS.navigate(~p"/#{group}")} id={id}>
+    <span aria-hidden="true">&#9658;</span> 
+    <div class="ml-3 overflow-hidden">
+      <p class="text-sm font-medium text-slate-900"><%= group.name %></p>
+      <p class="text-sm text-slate-500 truncate"> <%= count_completed_group_tasks(group) %> of <%= length(group.group_tasks) %> TASKS COMPLETE</p>
+    </div>
+  </li>
+</ul>

@@ -12,7 +12,6 @@ defmodule Todo.TaskListFixtures do
       attrs
       |> Enum.into(%{
         description: "some description",
-        is_completed: true,
         name: "some name"
       })
       |> Todo.TaskList.create_group()
@@ -30,7 +29,7 @@ defmodule Todo.TaskListFixtures do
         dependent_group_task_id: nil,
         description: "some description",
         group_id: 1,
-        is_completed: true,
+        is_completed: false,
         name: "some name"
       })
       |> Todo.TaskList.create_group_task()

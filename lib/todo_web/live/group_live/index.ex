@@ -5,7 +5,7 @@ defmodule TodoWeb.GroupLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, stream(socket, :groups, TaskList.list_groups())}
+    {:ok, stream(socket, :groups, TaskList.get_list_groups())}
   end
 
   @impl true

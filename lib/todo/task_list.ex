@@ -20,6 +20,10 @@ defmodule Todo.TaskList do
 
   """
   def list_groups do
+    Repo.all(Group)
+  end
+
+  def get_list_groups do
     Repo.all(Group) |> Repo.preload(group_tasks: :dependent_group_task)
   end
 

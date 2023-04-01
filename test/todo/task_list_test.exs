@@ -76,72 +76,78 @@ defmodule Todo.TaskListTest do
       name: nil
     }
 
-    test "list_group_tasks/0 returns all group_tasks" do
-      group_task = group_task_fixture()
+    setup _ do
+      group = group_fixture()
+      %{group: group, group_task: group_task_fixture(%{group_id: group.id})}
+    end
+
+    test "list_group_tasks/0 returns all group_tasks", %{group_task: group_task} do
       assert TaskList.list_group_tasks() == [group_task]
     end
 
-    test "get_group_task!/1 returns the group_task with given id" do
-      group_task = group_task_fixture()
+    test "get_group_task!/1 returns the group_task with given id", %{group_task: group_task} do
       assert TaskList.get_group_task!(group_task.id) == group_task
     end
 
-    test "create_group_task/1 with valid data creates a group_task" do
+    test "create_group_task/1 with valid data creates a group_task", %{
+      group: group,
+      group_task: group_task
+    } do
       valid_attrs = %{
-        dependent_group_task_id: 42,
-        description: "some description",
-        group_id: 42,
-        is_completed: true,
-        name: "some name"
+        dependent_group_task_id: group_task.id,
+        description: "test some description",
+        group_id: group.id,
+        is_completed: false,
+        name: "test some name"
       }
 
-      assert {:ok, %GroupTask{} = group_task} = TaskList.create_group_task(valid_attrs)
-      assert group_task.dependent_group_task_id == 42
-      assert group_task.description == "some description"
-      assert group_task.group_id == 42
-      assert group_task.is_completed == true
-      assert group_task.name == "some name"
+      assert {:ok, %GroupTask{} = created_group_task} = TaskList.create_group_task(valid_attrs)
+      assert created_group_task.dependent_group_task_id == group_task.id
+      assert created_group_task.description == "test some description"
+      assert created_group_task.group_id == group.id
+      assert created_group_task.is_completed == false
+      assert created_group_task.name == "test some name"
     end
 
     test "create_group_task/1 with invalid data returns error changeset" do
       assert {:error, %Ecto.Changeset{}} = TaskList.create_group_task(@invalid_attrs)
     end
 
-    test "update_group_task/2 with valid data updates the group_task" do
-      group_task = group_task_fixture()
+    test "update_group_task/2 with valid data updates the group_task", %{group_task: group_task} do
+      second_group = group_fixture()
+      second_group_task = group_task_fixture(%{group_id: second_group.id})
 
       update_attrs = %{
-        dependent_group_task_id: 43,
+        dependent_group_task_id: second_group_task.id,
         description: "some updated description",
-        group_id: 43,
-        is_completed: false,
+        group_id: second_group.id,
+        is_completed: true,
         name: "some updated name"
       }
 
-      assert {:ok, %GroupTask{} = group_task} =
+      assert {:ok, %GroupTask{} = updated_group_task} =
                TaskList.update_group_task(group_task, update_attrs)
 
-      assert group_task.dependent_group_task_id == 43
-      assert group_task.description == "some updated description"
-      assert group_task.group_id == 43
-      assert group_task.is_completed == false
-      assert group_task.name == "some updated name"
+      assert updated_group_task.dependent_group_task_id == second_group_task.id
+      assert updated_group_task.description == "some updated description"
+      assert updated_group_task.group_id == second_group.id
+      assert updated_group_task.is_completed == true
+      assert updated_group_task.name == "some updated name"
     end
 
-    test "update_group_task/2 with invalid data returns error changeset" do
-      group_task = group_task_fixture()
+    test "update_group_task/2 with invalid data returns error changeset", %{
+      group_task: group_task
+    } do
       assert {:error, %Ecto.Changeset{}} = TaskList.update_group_task(group_task, @invalid_attrs)
       assert group_task == TaskList.get_group_task!(group_task.id)
     end
 
-    test "delete_group_task/1 deletes the group_task" do
-      group_task = group_task_fixture()
+    test "delete_group_task/1 deletes the group_task", %{group_task: group_task} do
       assert {:ok, %GroupTask{}} = TaskList.delete_group_task(group_task)
       assert_raise Ecto.NoResultsError, fn -> TaskList.get_group_task!(group_task.id) end
     end
 
-    test "change_group_task/1 returns a group_task changeset" do
-      group_task = group_task_fixture()
+    test "change_group_task/1 returns a group_task changeset", %{group_task: group_task} do
       assert %Ecto.Changeset{} = TaskList.change_group_task(group_task)
     end
   end
